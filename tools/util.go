@@ -3,6 +3,7 @@ package tools
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"os"
 	"time"
 )
 
@@ -48,4 +49,15 @@ func ParseToken(token string) (bool, error) {
 	}
 
 	return false, err
+}
+
+func GetFileNameList(dirPath string) []string {
+	infos, _ := os.ReadDir(dirPath)
+	nameList := []string{}
+	for _, info := range infos {
+		if !info.IsDir() {
+			nameList = append(nameList, info.Name())
+		}
+	}
+	return nameList
 }

@@ -4,6 +4,7 @@ import (
 	"SitesBackend/db"
 	"SitesBackend/interpretor"
 	"SitesBackend/tools"
+	"encoding/json"
 	"github.com/gofiber/fiber/v2"
 	"io"
 	"log"
@@ -83,6 +84,16 @@ func NoAuth(router fiber.Router) {
 
 		}
 		return ctx.JSON(tools.ResultSet{Data: token, Msg: "login suc", Status: 200})
+	})
+	router.Get("/fileList", func(ctx *fiber.Ctx) error {
+		home, _ := os.UserHomeDir()
+		list := tools.GetFileNameList(home + "/opt/fiberStorage/")
+		bytes, _ := json.Marshal(list)
+		return ctx.JSON(tools.ResultSet{
+			Data:   string(bytes),
+			Msg:    "suc",
+			Status: 200,
+		})
 	})
 
 	router.Get("/download", func(ctx *fiber.Ctx) error {
